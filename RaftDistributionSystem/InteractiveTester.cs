@@ -56,6 +56,11 @@ public class InteractiveTester
                     break;
 
                 case "9":
+                    ResetElections();
+                    Thread.Sleep(4000);
+                    break;
+
+                case "0":
                     _running = false;
                     break;
 
@@ -80,8 +85,18 @@ public class InteractiveTester
         Console.WriteLine("6. Heal network partition");
         Console.WriteLine("7. Run chaos test");
         Console.WriteLine("8. Show logs");
-        Console.WriteLine("9. Exit");
+        Console.WriteLine("9. Reset Elections");
+        Console.WriteLine("0. Exit");
         Console.Write("Select an option: ");
+    }
+
+    private void ResetElections()
+    {
+        foreach (var node in _system.GetNodes())
+        {
+            node.ChangeState(RaftDistributionSystem.Enums.NodeState.Follower);
+        }
+        
     }
 
     private void ShowSystemStatus()
@@ -141,8 +156,10 @@ public class InteractiveTester
     private void RecoverNode()
     {
         var failedNodes = _system.GetNodes()
-            .Where(n => n.GetCurrentState()["state"].ToString() == "Follower" &&
-                       n.GetCurrentState()["leaderId"] == null)
+            .Where(n =>
+                (n.GetCurrentState()["state"].ToString() == "Follower" ||
+                 n.GetCurrentState()["state"].ToString() == "Candidate") &&
+                n.GetCurrentState()["leaderId"] == null)
             .ToList();
 
         if (!failedNodes.Any())

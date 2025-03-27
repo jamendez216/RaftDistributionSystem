@@ -106,7 +106,7 @@ public class Node
         });
     }
 
-    private void ChangeState(NodeState newState)
+    public void ChangeState(NodeState newState)
     {
         if (State != newState)
         {
@@ -165,7 +165,7 @@ public class Node
         }
 
         // In candidate state:
-        Console.WriteLine($"[Node {_nodeId}] Lost election - saw higher term");
+        Console.WriteLine($"[Node {_nodeId}] Became candidate.");
     }
 
     private void BecomeLeader()
@@ -347,6 +347,7 @@ public class Node
                 // If votes from majority of servers, become leader
                 if (_votesReceived > (decimal)_allNodeIds.Count / 2)
                 {
+                    Console.WriteLine($"[Node {_nodeId} got selected as leader with {_votesReceived} votes]");
                     ChangeState(NodeState.Leader);
                 }
             }
