@@ -126,7 +126,7 @@ public class InteractiveTester
         var value = Console.ReadLine();
 
         var success = _system.ProposeValue(nodeId, value);
-        Console.WriteLine(success ? "✓ Value proposed successfully" : "✗ Failed to propose value");
+        Console.WriteLine(success ? "✓ Value proposed successfully" : "X Failed to propose value");
     }
 
     private void FailRandomNode()
