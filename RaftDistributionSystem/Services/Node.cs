@@ -482,7 +482,7 @@ public class Node
 
                 case NodeState.Candidate:
                     // Check election timeout
-                    if ((DateTime.Now - _lastHeartbeat).TotalSeconds > _electionTimeout)
+                    if ((DateTime.Now - _lastHeartbeat).TotalSeconds > _electionTimeout && this.State == NodeState.Follower)
                     {
                         BecomeCandidate();
                     }
